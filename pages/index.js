@@ -9,11 +9,13 @@ import { GammaCorrectionShader } from "three/examples/jsm/shaders/GammaCorrectio
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { RGBShiftShader } from "three/examples/jsm/shaders/RGBShiftShader.js";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
+import { createHeadScene } from "./head-from-model.js";
 
 const Index = () => {
   const mountRef = useRef(null);
 
   useEffect(() => {
+
     /**
      * Base
      */
@@ -30,6 +32,9 @@ const Index = () => {
     const fog = new THREE.Fog("#000000", 1, 2.5);
 
     scene.fog = fog;
+
+    const sceneHead = new THREE.Scene();
+
 
     // Textures
     const textureLoader = new THREE.TextureLoader();
@@ -87,13 +92,13 @@ const Index = () => {
     gui.addColor(ambientLight, "color").name("AmbientLight color");
 
     const spotlight = new THREE.SpotLight(
-      "#d53c3d",
+      "#551133",
       40,
       25,
       Math.PI * 0.1,
       0.25
     );
-    spotlight.position.set(0.5, 0.75, 2.1);
+    spotlight.position.set(0.5, 8, 2.1);
     spotlight.target.position.x = -0.25;
     spotlight.target.position.y = 0.25;
     spotlight.target.position.z = 0.25;
@@ -101,7 +106,7 @@ const Index = () => {
     scene.add(spotlight.target);
 
     const spotlight2 = new THREE.SpotLight(
-      "#d53c3d",
+      "#330022",
       40,
       25,
       Math.PI * 0.1,
@@ -228,7 +233,7 @@ const Index = () => {
     effectComposer.addPass(renderPass);
 
     const rgbShiftPass = new ShaderPass(RGBShiftShader);
-    rgbShiftPass.uniforms["amount"].value = 0.001;
+    rgbShiftPass.uniforms["amount"].value = 0.003;
     gui
       .add(rgbShiftPass.uniforms["amount"], "value")
       .min(0)
@@ -240,7 +245,7 @@ const Index = () => {
     effectComposer.addPass(gammaCorrectionPass);
 
     var bloomParams = {
-      strength: 0.2,
+      strength: 0,
     };
 
     const bloomPass = new UnrealBloomPass();
@@ -274,21 +279,33 @@ const Index = () => {
       effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     });
 
+    createHeadScene(sceneHead, camera, renderer);
+
     // Animation
     const clock = new THREE.Clock();
 
+    let speed = 0.15;
+    // document.addEventListener('scroll', function()=>{
+    //   speed = speed*
+    // })
     const tick = () => {
       const elapsedTime = clock.getElapsedTime();
 
       // Update plane position
-      plane.position.z = (elapsedTime * 0.15) % 2;
-      plane2.position.z = ((elapsedTime * 0.15) % 2) - 2;
+
+      plane.position.z = (elapsedTime * speed) % 2;
+      plane2.position.z = ((elapsedTime * speed) % 2) - 2;
 
       // Update controls
       controls.update();
 
       // Render
       effectComposer.render();
+
+      // Render head scene (without background light interference)
+      renderer.autoClear = false;  // Prevent clearing between the two renders
+      renderer.clearDepth();  // Clear depth buffer to ensure proper layering
+      renderer.render(sceneHead, camera);
 
       // Call tick again on the next frame
       window.requestAnimationFrame(tick);
@@ -300,33 +317,11 @@ const Index = () => {
   return (
     <div>
       <Head>
-        <title>Linear - Three.js</title>
-        <meta
-          name="description"
-          content="A reversed-engineer versioned of the WebGL animation from the Linear 2021 release page. Recreated by @MaximeHeckel"
-        />
+        <title>3D Scene with Separate Head Model</title>
+        <meta name="description" content="Three.js scene with separate head model and background." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div className="label-container">
-          <p className="label">
-            ⚡️ Originally inspired by the{" "}
-            <a href="https://linear.app/releases/2021-06">
-              2021 Linear release page
-            </a>
-          </p>
-          <p className="label">
-            ✨ Reverse-engineered and recreated by{" "}
-            <a href="https://twitter.com/MaximeHeckel">@MaximeHeckel</a> with
-            Three.js
-          </p>
-          <p className="label">
-            👉 How I built this?{" "}
-            <a href="https://blog.maximeheckel.com/posts/vaporwave-3d-scene-with-threejs/">
-              Building a Vaporwave scene with Three.js
-            </a>
-          </p>
-        </div>
         <canvas ref={mountRef} className="webgl"></canvas>
       </main>
     </div>
