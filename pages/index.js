@@ -10,9 +10,12 @@ import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { RGBShiftShader } from "three/examples/jsm/shaders/RGBShiftShader.js";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { createHeadScene } from "./head-from-model.js";
+import Content from "./content.js";
 
 const Index = () => {
   const mountRef = useRef(null);
+  const headModelRef = useRef(null);  // Store the head model reference
+
 
   useEffect(() => {
 
@@ -214,8 +217,8 @@ const Index = () => {
     scene.add(camera);
 
     // Controls
-    const controls = new OrbitControls(camera, canvas);
-    controls.enableDamping = true;
+    // const controls = new OrbitControls(camera, canvas);
+    // controls.enableDamping = true;
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({
@@ -245,7 +248,7 @@ const Index = () => {
     effectComposer.addPass(gammaCorrectionPass);
 
     var bloomParams = {
-      strength: 0,
+      strength: 1.5,
     };
 
     const bloomPass = new UnrealBloomPass();
@@ -279,7 +282,40 @@ const Index = () => {
       effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     });
 
-    createHeadScene(sceneHead, camera, renderer);
+    let easing = 0.1;
+    function updateHeadRotation(mouse) {
+      if (headModelRef.current) {
+        const targetRotationX = mouse.y * -1 + 0.8;
+        const targetRotationY = mouse.x;
+
+        // Use lerp for smoother transitions
+        headModelRef.current.rotation.x = THREE.MathUtils.lerp(
+          headModelRef.current.rotation.x,
+          targetRotationX,
+          easing
+        );
+        headModelRef.current.rotation.y = THREE.MathUtils.lerp(
+          headModelRef.current.rotation.y,
+          targetRotationY,
+          easing
+        );
+      }
+    }
+
+
+
+    // function updateHeadRotation(mouse) {
+    //   if (headModelRef.current) {
+    //     // headModelRef.current.rotation.set(0,3,0);
+    //     const rotationX = mouse.y * -1 +0.8;
+    //     const rotationY = mouse.x;
+    //     headModelRef.current.rotation.x = rotationX;
+    //     headModelRef.current.rotation.y = rotationY;
+    //   }
+    // }
+    createHeadScene(sceneHead).then((model) => {
+      headModelRef.current = model;  // Save the loaded model
+    });
 
     // Animation
     const clock = new THREE.Clock();
@@ -288,8 +324,20 @@ const Index = () => {
     // document.addEventListener('scroll', function()=>{
     //   speed = speed*
     // })
+
+    //MYSZ
+    let mouse = { x: 0, y: 0 }; // Initialize mouse position
+
+    // Update mouse position when the user moves the mouse
+    window.addEventListener('mousemove', (event) => {
+      // Normalize mouse coordinates (-1 to 1 for both x and y)
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    });
+
     const tick = () => {
       const elapsedTime = clock.getElapsedTime();
+
 
       // Update plane position
 
@@ -297,7 +345,9 @@ const Index = () => {
       plane2.position.z = ((elapsedTime * speed) % 2) - 2;
 
       // Update controls
-      controls.update();
+      // controls.update();
+
+      updateHeadRotation(mouse);
 
       // Render
       effectComposer.render();
@@ -323,6 +373,7 @@ const Index = () => {
       </Head>
       <main>
         <canvas ref={mountRef} className="webgl"></canvas>
+        <Content/>
       </main>
     </div>
   );
