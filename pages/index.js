@@ -18,12 +18,11 @@ const Index = () => {
 
 
   useEffect(() => {
+    
 
-    /**
-     * Base
-     */
-    // Debug
     const gui = new dat.GUI();
+
+    gui.close();
 
     // Canvas
     const canvas = document.querySelector("canvas.webgl");
@@ -282,7 +281,7 @@ const Index = () => {
       effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     });
 
-    let easing = 0.1;
+    let easing = 0.05;
     function updateHeadRotation(mouse) {
       if (headModelRef.current) {
         const targetRotationX = mouse.y * -1 + 0.8;
@@ -301,18 +300,6 @@ const Index = () => {
         );
       }
     }
-
-
-
-    // function updateHeadRotation(mouse) {
-    //   if (headModelRef.current) {
-    //     // headModelRef.current.rotation.set(0,3,0);
-    //     const rotationX = mouse.y * -1 +0.8;
-    //     const rotationY = mouse.x;
-    //     headModelRef.current.rotation.x = rotationX;
-    //     headModelRef.current.rotation.y = rotationY;
-    //   }
-    // }
     createHeadScene(sceneHead).then((model) => {
       headModelRef.current = model;  // Save the loaded model
     });
@@ -321,9 +308,6 @@ const Index = () => {
     const clock = new THREE.Clock();
 
     let speed = 0.15;
-    // document.addEventListener('scroll', function()=>{
-    //   speed = speed*
-    // })
 
     //MYSZ
     let mouse = { x: 0, y: 0 }; // Initialize mouse position
