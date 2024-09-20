@@ -1,15 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap');
+
+
 * {
   margin: 0;
   padding: 0;
   color: white;
-}
+  font-family: 'Fira Code', monospace;}
 
-html,
-body {
-  /* overflow: hidden; */
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
+
 
 .webgl {
   position: fixed;
@@ -61,4 +59,32 @@ main{
   border: 2px white solid;
   width: 100hw;
   height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.border button{
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
+  border: white solid 2px;
+  /* box-shadow: 2px 2px white; */
+  padding: .7rem;
+  /* height: 2rem; */
+}
+.border button:hover,
+.border button:focus {
+  box-shadow: inset 0 3.25em 0 0 white;
+}
+
+.border button {  
+  color: white;
+  transition: 0.25s;
+  position: relative;
+  top: -2px;
+  left: -2px;
+  
+  &:hover,
+  &:focus { 
+    color: black;
+  }
 }

@@ -10,6 +10,8 @@ import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { RGBShiftShader } from "three/examples/jsm/shaders/RGBShiftShader.js";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { createHeadScene } from "./head-from-model.js";
+// import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
+// import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 import Content from "./content.js";
 
 const Index = () => {
@@ -18,7 +20,7 @@ const Index = () => {
 
 
   useEffect(() => {
-    
+
 
     const gui = new dat.GUI();
 
@@ -304,6 +306,19 @@ const Index = () => {
       headModelRef.current = model;  // Save the loaded model
     });
 
+    // const text_loader = new FontLoader();
+    // text_loader.load('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap', function (font) {
+    //   const TextGeometry = new TextGeometry('Hello, Three.js!', {
+    //     font: font,
+    //     size: 0.5,
+    //     height: 0.1
+    //   });
+    //   const TextMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    //   const TextMesh = new THREE.Mesh(TextGeometry, TextMaterial);
+    //   TextMesh.position.set(0, 10, -10); // Position the text
+    //   scene.add(TextMesh);
+    // });
+
     // Animation
     const clock = new THREE.Clock();
 
@@ -357,7 +372,7 @@ const Index = () => {
       </Head>
       <main>
         <canvas ref={mountRef} className="webgl"></canvas>
-        <Content/>
+        <Content />
       </main>
     </div>
   );
