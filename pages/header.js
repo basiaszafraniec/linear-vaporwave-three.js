@@ -1,7 +1,7 @@
 // import { div } from "three/webgpu"
 
 
-export default function Content() {
+export default function Header() {
     return (
         <main>
             <div className="border">
@@ -19,8 +19,6 @@ export default function Content() {
 
             </div>
             <section>
-
-
             </section>
         </main>
 

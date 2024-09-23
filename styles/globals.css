@@ -54,11 +54,11 @@ main{
   height: 100vh;
 }
 .border{
-  margin: 2rem;
-  margin-bottom: 2rem;
+  margin: auto;
+  /* margin-bottom: 2rem; */
   border: 2px white solid;
-  width: 100hw;
-  height: 100%;
+  width: 95vw;
+  height: 95vh;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;

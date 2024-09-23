@@ -12,7 +12,7 @@ import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPa
 import { createHeadScene } from "./head-from-model.js";
 // import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 // import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
-import Content from "./content.js";
+import Header from "./header.js";
 
 const Index = () => {
   const mountRef = useRef(null);
@@ -372,7 +372,7 @@ const Index = () => {
       </Head>
       <main>
         <canvas ref={mountRef} className="webgl"></canvas>
-        <Content />
+        <Header />
       </main>
     </div>
   );
